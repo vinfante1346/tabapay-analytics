@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TabaPay Performance Report - November 12, 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --secondary: #00C853;
+            --error: #FF3B30;
+            --warning: #FF9500;
+            --background: #F7F9FC;
+            --surface: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --border: #E5E7EB;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .scroll-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .content {
+            max-width: 1400px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Background gradients */
+        .bg-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -200px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: 7s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.05); }
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            font-weight: 500;
+            opacity: 0.95;
+            margin-bottom: 1rem;
+        }
+
+        .date {
+            font-size: 1.5rem;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+        }
+
+        .title-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 3rem;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .title-stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .title-stat-label {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid var(--border);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 102, 255, 0.15);
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            line-height: 1.1;
+        }
+
+        .stat-value.success { color: var(--secondary); }
+        .stat-value.error { color: var(--error); }
+        .stat-value.warning { color: var(--warning); }
+        .stat-value.primary { color: var(--primary); }
+
+        .stat-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .chart-container {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin: 2rem 0;
+        }
+
+        .chart-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .bar-label {
+            min-width: 200px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .bar-track {
+            flex: 1;
+            background: var(--background);
+            height: 50px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #4D94FF);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 1.5rem;
+            color: white;
+            font-weight: 800;
+            font-size: 1.125rem;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3);
+        }
+
+        .bar-fill.success {
+            background: linear-gradient(90deg, var(--secondary), #00A142);
+            box-shadow: 0 2px 8px rgba(0, 200, 83, 0.3);
+        }
+
+        .bar-fill.error {
+            background: linear-gradient(90deg, var(--error), #CC2E24);
+            box-shadow: 0 2px 8px rgba(255, 59, 48, 0.3);
+        }
+
+        .bar-fill.warning {
+            background: linear-gradient(90deg, var(--warning), #CC7700);
+            box-shadow: 0 2px 8px rgba(255, 149, 0, 0.3);
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.08), rgba(0, 200, 83, 0.08));
+            border-left: 6px solid var(--primary);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+        }
+
+        .insight-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .insight-title::before {
+            content: '💡';
+            font-size: 1.75rem;
+        }
+
+        .insight-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .insight-list li {
+            padding: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .insight-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+
+        .nav-dots {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 102, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--surface);
+        }
+
+        .nav-dot:hover {
+            background: var(--primary);
+            transform: scale(1.3);
+        }
+
+        .nav-dot.active {
+            background: var(--primary);
+            transform: scale(1.5);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.5);
+        }
+
+        @media (max-width: 1024px) {
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.5rem; }
+            .title-stats { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .subtitle { font-size: 1.5rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .stat-value { font-size: 2.5rem; }
+            .nav-dots { display: none; }
+            .bar-label { min-width: 120px; font-size: 0.9rem; }
+            .slide { padding: 3rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-dots" id="navDots"></div>
+
+    <div class="scroll-container" id="scrollContainer">
+
+        <!-- Slide 1: Title -->
+        <section class="slide title-slide">
+            <div class="content">
+                <h1>TabaPay<br>Performance Report</h1>
+                <div class="subtitle">Payment Processing Analysis</div>
+                <div class="date">November 12, 2025</div>
+
+                <div class="title-stats">
+                    <div>
+                        <div class="title-stat-value">1,782</div>
+                        <div class="title-stat-label">Total Transactions</div>
+                    </div>
+                    <div>
+                        <div class="title-stat-value">82.3%</div>
+                        <div class="title-stat-label">Success Rate</div>
+                    </div>
+                    <div>
+                        <div class="title-stat-value">$168K</div>
+                        <div class="title-stat-label">Total Volume</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Overview -->
+        <section class="slide">
+            <div class="bg-gradient">
+                <div class="orb orb-1"></div>
+                <div class="orb orb-2"></div>
+            </div>
+            <div class="content">
+                <h2>Performance Overview</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Transactions</div>
+                        <div class="stat-value">1,782</div>
+                        <div class="stat-description">Single day operations</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Success Rate</div>
+                        <div class="stat-value success">82.27%</div>
+                        <div class="stat-description">1,466 completed successfully</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Transaction Volume</div>
+                        <div class="stat-value primary">$168.4K</div>
+                        <div class="stat-description">Total payment value</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Average Transaction</div>
+                        <div class="stat-value">$114.88</div>
+                        <div class="stat-description">Per successful payment</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Error Rate</div>
+                        <div class="stat-value error">17.3%</div>
+                        <div class="stat-description">309 failed transactions</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Platform Revenue</div>
+                        <div class="stat-value">$146.60</div>
+                        <div class="stat-description">0.087% effective fee rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Transaction Types -->
+        <section class="slide">
+            <div class="bg-gradient">
+                <div class="orb orb-1"></div>
+            </div>
+            <div class="content">
+                <h2>Transaction Mix</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">Platform Balance</div>
+                    <div class="bar-chart">
+                        <div class="bar-row">
+                            <div class="bar-label">Purchases</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 57.3%;">1,021 (57.3%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">Disbursements</div>
+                            <div class="bar-track">
+                                <div class="bar-fill success" style="width: 42.7%;">761 (42.7%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Purchases</div>
+                        <div class="stat-value primary">1,021</div>
+                        <div class="stat-description">Money flowing into platform (57.3%)</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Disbursements</div>
+                        <div class="stat-value success">761</div>
+                        <div class="stat-description">Money flowing out of platform (42.7%)</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Platform Balance</div>
+                        <div class="stat-value">+260</div>
+                        <div class="stat-description">Net purchase-heavy day</div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">Transaction Mix Analysis</div>
+                    <ul class="insight-list">
+                        <li><strong>Purchase-Heavy Day:</strong> 57.3% purchases vs 42.7% disbursements</li>
+                        <li><strong>Platform Health:</strong> More money coming in than going out</li>
+                        <li><strong>Consumer Activity:</strong> High purchase volume indicates active user spending</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Network Performance -->
+        <section class="slide">
+            <div class="bg-gradient">
+                <div class="orb orb-2"></div>
+            </div>
+            <div class="content">
+                <h2>Network Distribution</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">Market Share by Network</div>
+                    <div class="bar-chart">
+                        <div class="bar-row">
+                            <div class="bar-label">Visa</div>
+                            <div class="bar-track">
+                                <div class="bar-fill success" style="width: 81.8%;">1,458 (81.8%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">Mastercard</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 17.7%;">316 (17.7%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">Discover</div>
+                            <div class="bar-track">
+                                <div class="bar-fill warning" style="width: 0.4%;">8 (0.4%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">Network Insights</div>
+                    <ul class="insight-list">
+                        <li><strong>Visa Dominance:</strong> 81.8% market share with strong performance</li>
+                        <li><strong>Mastercard Secondary:</strong> 17.7% providing network redundancy</li>
+                        <li><strong>Discover Minimal:</strong> Only 0.4% - opportunity for growth</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Card Type Performance -->
+        <section class="slide">
+            <div class="bg-gradient">
+                <div class="orb orb-1"></div>
+            </div>
+            <div class="content">
+                <h2>Card Type Performance</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">Success Rate by Card Type</div>
+                    <div class="bar-chart">
+                        <div class="bar-row">
+                            <div class="bar-label">Debit Cards</div>
+                            <div class="bar-track">
+                                <div class="bar-fill success" style="width: 85.7%;">85.7% (1,587 cards)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">Prepaid Cards</div>
+                            <div class="bar-track">
+                                <div class="bar-fill warning" style="width: 63.74%;">63.74% (91 cards)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">Credit Cards</div>
+                            <div class="bar-track">
+                                <div class="bar-fill error" style="width: 46.15%;">46.15% (104 cards)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Debit Dominance</div>
+                        <div class="stat-value success">89.1%</div>
+                        <div class="stat-description">1,587 of 1,782 transactions</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Debit Success</div>
+                        <div class="stat-value success">85.7%</div>
+                        <div class="stat-description">Highest performance tier</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Credit Opportunity</div>
+                        <div class="stat-value error">46.15%</div>
+                        <div class="stat-description">Needs immediate attention</div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">Strategic Recommendations</div>
+                    <ul class="insight-list">
+                        <li><strong>Debit Focus:</strong> 89.1% of volume with 85.7% success - maintain and scale</li>
+                        <li><strong>Credit Challenge:</strong> 46.15% success rate requires investigation and fixes</li>
+                        <li><strong>Prepaid Risk:</strong> 63.74% success suggests need for better validation</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Transaction Sizes -->
+        <section class="slide">
+            <div class="bg-gradient">
+                <div class="orb orb-2"></div>
+            </div>
+            <div class="content">
+                <h2>Transaction Size Analysis</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">Payment Amount Distribution</div>
+                    <div class="bar-chart">
+                        <div class="bar-row">
+                            <div class="bar-label">$10 - $50</div>
+                            <div class="bar-track">
+                                <div class="bar-fill success" style="width: 100%;">506 (34.5%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">Under $10</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 75.7%;">383 (26.1%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">$100 - $500</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 54.7%;">277 (18.9%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">$50 - $100</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 34.2%;">173 (11.8%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">$500+</div>
+                            <div class="bar-track">
+                                <div class="bar-fill warning" style="width: 25.1%;">127 (8.7%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Small Payments</div>
+                        <div class="stat-value">60.6%</div>
+                        <div class="stat-description">Under $50 (889 transactions)</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Sweet Spot</div>
+                        <div class="stat-value primary">$10-$50</div>
+                        <div class="stat-description">Most common range (34.5%)</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">High Value</div>
+                        <div class="stat-value">8.7%</div>
+                        <div class="stat-description">$500+ (127 transactions)</div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">Size Profile Analysis</div>
+                    <ul class="insight-list">
+                        <li><strong>Consumer-Focused:</strong> 60.6% under $50 indicates retail/consumer payments</li>
+                        <li><strong>Average Sweet Spot:</strong> $114.88 average aligns with consumer spending</li>
+                        <li><strong>High-Value Presence:</strong> 8.7% over $500 represents significant volume</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Traffic Patterns -->
+        <section class="slide">
+            <div class="bg-gradient">
+                <div class="orb orb-1"></div>
+            </div>
+            <div class="content">
+                <h2>Hourly Traffic Patterns</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">Peak Activity Hours</div>
+                    <div class="bar-chart">
+                        <div class="bar-row">
+                            <div class="bar-label">11 PM (Peak)</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 100%;">444 transactions</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">10 PM</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 37.4%;">176 transactions</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">9 PM</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 37.6%;">167 transactions</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">8 PM</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 37.2%;">165 transactions</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">7 PM</div>
+                            <div class="bar-track">
+                                <div class="bar-fill success" style="width: 31.8%;">141 transactions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">Traffic Insights</div>
+                    <ul class="insight-list">
+                        <li><strong>Evening Peak:</strong> 11 PM is busiest with 444 transactions (24.9% of daily volume)</li>
+                        <li><strong>Night Activity:</strong> Heavy usage from 7 PM through midnight</li>
+                        <li><strong>Consumer Pattern:</strong> Platform optimized for evening/night usage</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Top Issuers -->
+        <section class="slide">
+            <div class="bg-gradient">
+                <div class="orb orb-2"></div>
+            </div>
+            <div class="content">
+                <h2>Top Issuing Banks</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">Transaction Volume by Issuer</div>
+                    <div class="bar-chart">
+                        <div class="bar-row">
+                            <div class="bar-label">Community Federal</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 100%;">850 (47.7%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">Bank of America</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 25.5%;">217 (12.2%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">Wells Fargo</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 9.4%;">80 (4.5%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">Chase</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 8.1%;">69 (3.9%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">Issuer Concentration</div>
+                    <ul class="insight-list">
+                        <li><strong>Platform Dominance:</strong> Community Federal accounts for 47.7% of transactions</li>
+                        <li><strong>Top 4 Banks:</strong> Represent 68.3% of total volume</li>
+                        <li><strong>Diversification Need:</strong> High concentration with single issuer</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Error Analysis -->
+        <section class="slide">
+            <div class="bg-gradient">
+                <div class="orb orb-1"></div>
+            </div>
+            <div class="content">
+                <h2>Error Analysis</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">Top Error Codes</div>
+                    <div class="bar-chart">
+                        <div class="bar-row">
+                            <div class="bar-label">51 - Insufficient Funds</div>
+                            <div class="bar-track">
+                                <div class="bar-fill error" style="width: 100%;">153 (49.5%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">59 - Suspected Fraud</div>
+                            <div class="bar-track">
+                                <div class="bar-fill error" style="width: 28.1%;">43 (13.9%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">05 - Do Not Honor</div>
+                            <div class="bar-track">
+                                <div class="bar-fill warning" style="width: 17.6%;">27 (8.7%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">5C - AVS Mismatch</div>
+                            <div class="bar-track">
+                                <div class="bar-fill warning" style="width: 14.4%;">22 (7.1%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">63 - Security Violation</div>
+                            <div class="bar-track">
+                                <div class="bar-fill warning" style="width: 8.5%;">13 (4.2%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box" style="background: linear-gradient(135deg, rgba(255, 59, 48, 0.1), rgba(255, 59, 48, 0.05)); border-left-color: var(--error);">
+                    <div class="insight-title" style="color: var(--error);">Error Reduction Strategy</div>
+                    <ul class="insight-list">
+                        <li><strong>Code 51 (49.5%):</strong> Implement real-time balance verification before initiating transactions</li>
+                        <li><strong>Code 59 (13.9%):</strong> Review and optimize fraud detection rules to reduce false positives</li>
+                        <li><strong>Code 5C (7.1%):</strong> Improve address verification UI and provide clearer user guidance</li>
+                        <li><strong>Potential Impact:</strong> Addressing top 3 errors could improve success rate to 90%+</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Recommendations -->
+        <section class="slide">
+            <div class="bg-gradient">
+                <div class="orb orb-1"></div>
+                <div class="orb orb-2"></div>
+            </div>
+            <div class="content">
+                <h2>Strategic Recommendations</h2>
+
+                <div class="chart-container">
+                    <div style="display: grid; gap: 2rem;">
+                        <div class="insight-box" style="margin: 0;">
+                            <div class="insight-title">Immediate Actions (Week 1)</div>
+                            <ul class="insight-list">
+                                <li>Deploy real-time balance verification to prevent 153 insufficient fund errors</li>
+                                <li>Review fraud detection rules causing 43 suspected fraud flags</li>
+                                <li>Improve address verification process to reduce AVS mismatches</li>
+                            </ul>
+                        </div>
+
+                        <div class="insight-box" style="margin: 0; border-left-color: var(--secondary);">
+                            <div class="insight-title" style="color: var(--secondary);">Short-Term Goals (30 Days)</div>
+                            <ul class="insight-list">
+                                <li>Improve credit card success rate from 46.15% to 70%+</li>
+                                <li>Optimize prepaid card handling (63.74% → 80%+)</li>
+                                <li>Reduce issuer concentration from 47.7% to under 35%</li>
+                                <li>Target overall success rate of 90%+</li>
+                            </ul>
+                        </div>
+
+                        <div class="insight-box" style="margin: 0; border-left-color: var(--warning);">
+                            <div class="insight-title" style="color: var(--warning);">Long-Term Strategy (90 Days)</div>
+                            <ul class="insight-list">
+                                <li>Scale to 3,000+ daily transactions while maintaining 90% success</li>
+                                <li>Expand Mastercard and Discover partnerships for network diversification</li>
+                                <li>Implement ML-based fraud detection to reduce false positives by 50%</li>
+                                <li>Diversify issuer base to reduce concentration risk</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 11: Summary -->
+        <section class="slide title-slide">
+            <div class="content">
+                <h1>Key Takeaways</h1>
+                <div class="subtitle">November 12, 2025 Performance</div>
+
+                <div style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 24px; padding: 3rem; margin-top: 3rem; text-align: left;">
+                    <div style="display: grid; gap: 2.5rem;">
+                        <div>
+                            <div style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem;">✅ Strengths</div>
+                            <ul style="list-style: none; padding: 0; font-size: 1.15rem; line-height: 2;">
+                                <li>→ 1,782 transactions with 82.27% success rate</li>
+                                <li>→ $168.4K in transaction volume processed</li>
+                                <li>→ Debit cards at 85.7% success with 89.1% market share</li>
+                                <li>→ Competitive 0.087% platform fee rate</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <div style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem;">🎯 Opportunities</div>
+                            <ul style="list-style: none; padding: 0; font-size: 1.15rem; line-height: 2;">
+                                <li>→ 153 insufficient fund errors (49.5%) - Easy fix with validation</li>
+                                <li>→ Credit card performance at 46.15% - Major improvement potential</li>
+                                <li>→ Fraud rules optimization - Reduce 43 false positives</li>
+                                <li>→ Path to 90%+ success rate is clear and achievable</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <div style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem;">🚀 Next Steps</div>
+                            <ul style="list-style: none; padding: 0; font-size: 1.15rem; line-height: 2;">
+                                <li>→ Deploy balance verification immediately</li>
+                                <li>→ Optimize fraud detection rules this week</li>
+                                <li>→ Target 90% success rate within 30 days</li>
+                                <li>→ Scale to 3,000+ daily transactions by Q1 2026</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Navigation
+        const scrollContainer = document.getElementById('scrollContainer');
+        const slides = document.querySelectorAll('.slide');
+        const navDotsContainer = document.getElementById('navDots');
+
+        slides.forEach((slide, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            dot.addEventListener('click', () => {
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+            });
+            navDotsContainer.appendChild(dot);
+        });
+
+        const navDots = document.querySelectorAll('.nav-dot');
+        navDots[0].classList.add('active');
+
+        scrollContainer.addEventListener('scroll', () => {
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+                    navDots.forEach(dot => dot.classList.remove('active'));
+                    navDots[index].classList.add('active');
+                }
+            });
+        });
+
+        // Animate bars
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.bar-fill');
+                    bars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 100);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentIndex = Array.from(navDots).findIndex(dot => dot.classList.contains('active'));
+            if (e.key === 'ArrowDown' && currentIndex < slides.length - 1) {
+                slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' && currentIndex > 0) {
+                slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
